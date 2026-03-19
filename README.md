@@ -10,22 +10,21 @@ A chatbot built with [Google Agent Development Kit (ADK)](https://google.github.
 pip install -r requirements.txt
 ```
 
-### 2. Configure API key
+### 2. Configure Vertex AI credentials
 
-Copy `.env` to `.env.local` and set your Gemini API key:
+The chatbot uses [Vertex AI](https://cloud.google.com/vertex-ai). Update `.env` with your Google Cloud project details:
+
+```
+GOOGLE_GENAI_USE_VERTEXAI=1
+GOOGLE_CLOUD_PROJECT=your-project-id
+GOOGLE_CLOUD_LOCATION=your-region
+```
+
+Make sure you are authenticated with Google Cloud:
 
 ```bash
-cp .env .env.local
+gcloud auth application-default login
 ```
-
-Edit `.env.local` and replace `your_api_key_here` with your actual [Google AI Studio](https://aistudio.google.com/apikey) API key:
-
-```
-GOOGLE_GENAI_USE_VERTEXAI=FALSE
-GOOGLE_API_KEY=your_api_key_here
-```
-
-> **Note:** `.env.local` is listed in `.gitignore` and will not be committed to version control.
 
 ### 3. Run the chatbot
 
