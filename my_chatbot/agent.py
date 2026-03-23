@@ -1,8 +1,4 @@
-import os
-from dotenv import load_dotenv
 from google.adk.agents import Agent
-
-load_dotenv(override=True)
 
 root_agent = Agent(
     name="my_chatbot",

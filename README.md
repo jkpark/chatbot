@@ -64,14 +64,15 @@ The `deploy.py` script deploys the chatbot to [Vertex AI Agent Engine](https://c
 
 2. **Find your `gitRepositoryLink` ID**:
    ```bash
-   gcloud developer-connect repository-links list \
+   gcloud developer-connect connections git-repository-links list \
      --connection=chatbot-connection \
      --location=asia-northeast3 \
      --project=chatbot-test-490711
    ```
    Copy the link ID from the output.
 
-3. **Update `deploy.py`**: Replace `{YOUR_REPOSITORY_LINK_ID}` in `GIT_REPOSITORY_LINK` with the ID from the previous step.
+3. **Update `.env`**: Add the copied ID to your `.env` file:
+   `YOUR_REPOSITORY_LINK_ID=your-link-id`
 
 #### Run the deployment script
 

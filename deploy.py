@@ -5,13 +5,7 @@ Usage:
     python deploy.py
 
 Before running this script:
-1. Set GIT_REPOSITORY_LINK to the full Developer Connect gitRepositoryLink resource name.
-   Format: projects/{project}/locations/{location}/connections/{connection}/gitRepositoryLinks/{link_id}
-   You can find the link ID by running:
-     gcloud developer-connect repository-links list \
-       --connection=chatbot-connection \
-       --location=asia-northeast3 \
-       --project=chatbot-test-490711
+1. Add YOUR_REPOSITORY_LINK_ID to your .env file.
 
 2. Authenticate with Google Cloud:
      gcloud auth application-default login
@@ -35,11 +29,11 @@ LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "asia-northeast3")
 
 # Developer Connect Git Repository Link resource name.
 # Connection path: projects/chatbot-test-490711/locations/asia-northeast3/connections/chatbot-connection
-# Replace {YOUR_REPOSITORY_LINK_ID} with the actual gitRepositoryLink ID from Developer Connect.
+YOUR_REPOSITORY_LINK_ID = os.getenv("YOUR_REPOSITORY_LINK_ID", "{YOUR_REPOSITORY_LINK_ID}")
 GIT_REPOSITORY_LINK = (
     "projects/chatbot-test-490711/locations/asia-northeast3"
     "/connections/chatbot-connection"
-    "/gitRepositoryLinks/{YOUR_REPOSITORY_LINK_ID}"
+    f"/gitRepositoryLinks/{YOUR_REPOSITORY_LINK_ID}"
 )
 
 # The Git revision to deploy (branch name, tag, or commit SHA).
@@ -54,8 +48,8 @@ DISPLAY_NAME = os.getenv("AGENT_ENGINE_DISPLAY_NAME", "my-chatbot")
 def main() -> None:
     if "{YOUR_REPOSITORY_LINK_ID}" in GIT_REPOSITORY_LINK:
         raise ValueError(
-            "Please set GIT_REPOSITORY_LINK to the full Developer Connect "
-            "gitRepositoryLink resource name before running this script.\n"
+            "Please set YOUR_REPOSITORY_LINK_ID in your .env file "
+            "before running this script.\n"
             "Run the following command to find the link ID:\n"
             "  gcloud developer-connect repository-links list \\\n"
             "    --connection=chatbot-connection \\\n"
