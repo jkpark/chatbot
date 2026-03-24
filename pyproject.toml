@@ -1,0 +1,21 @@
+[project]
+name = "chatbot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "google-adk>=1.0.0",
+    "google-cloud-aiplatform[adk,agent-engines]>=1.141.0",
+    "python-dotenv>=1.0.0",
+]
+
+
+[dependency-groups]
+deployment = [
+    "absl-py>=2.2.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+asyncio_default_fixture_loop_scope = "function"

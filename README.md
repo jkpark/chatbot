@@ -2,12 +2,32 @@
 
 A chatbot built with [Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/get-started/python/).
 
+## Prerequisites
+
+We recommend using [mise-en-place (mise)](https://mise.jdx.dev/) to manage your development environment. This project includes a `mise.toml` file to automatically install the required versions of Python, `uv`, and `gcloud`.
+
+### Using mise (Recommended)
+
+1. Install [mise](https://mise.jdx.dev/getting-started.html).
+2. Run:
+   ```bash
+   mise install
+   ```
+
+### Manual Installation
+
+If you prefer to install the requirements manually, ensure you have the following:
+
+- **Python (3.12+)**: [Install Python](https://www.python.org/downloads/)
+- **uv**: [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+- **Google Cloud SDK (gcloud)**: [Install gcloud](https://cloud.google.com/sdk/docs/install)
+
 ## Setup
 
 ### 1. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ### 2. Configure Vertex AI credentials
@@ -24,6 +44,7 @@ Make sure you are authenticated with Google Cloud:
 
 ```bash
 gcloud auth application-default login
+gcloud auth application-default set-quota-project $GOOGLE_CLOUD_PROJECT
 ```
 
 ### 3. Run the chatbot
@@ -42,43 +63,46 @@ adk web
 
 Then open `http://localhost:8000` in your browser.
 
-**API server:**
+## Running Tests
+
+For running tests and evaluation, install the extra dependencies:
 
 ```bash
-adk api_server
+uv sync --dev
 ```
+
+Then the tests and evaluation can be run from the `academic-research` directory using
+the `pytest` module:
+
+```bash
+uv run pytest tests
+uv run pytest eval
+```
+
+`tests` runs the agent on a sample request, and makes sure that every component
+is functional. `eval` is a demonstration of how to evaluate the agent, using the
+`AgentEvaluator` in ADK. It sends a couple requests to the agent and expects
+that the agent's responses match a pre-defined response reasonablly well.
+
 
 ## Deployment
 
-### Deploy to Vertex AI Agent Engine via Developer Connect
-
-The `deploy.py` script deploys the chatbot to [Vertex AI Agent Engine](https://cloud.google.com/vertex-ai/docs/agent-engine/overview) using [Developer Connect](https://cloud.google.com/developer-connect/docs/overview), which fetches the source code directly from this Git repository.
-
-#### Prerequisites
-
-1. **Link the repository to Developer Connect** (one-time setup):
-   Follow the [Developer Connect setup guide](https://cloud.google.com/developer-connect/docs/connect-repo) to connect this repository to Google Cloud. The connection used is:
-   ```
-   projects/chatbot-test-490711/locations/asia-northeast3/connections/chatbot-connection
-   ```
-
-2. **Find your `gitRepositoryLink` ID**:
-   ```bash
-   gcloud developer-connect connections git-repository-links list \
-     --connection=chatbot-connection \
-     --location=asia-northeast3 \
-     --project=chatbot-test-490711
-   ```
-   Copy the link ID from the output.
-
-3. **Update `.env`**: Add the copied ID to your `.env` file:
-   `YOUR_REPOSITORY_LINK_ID=your-link-id`
-
-#### Run the deployment script
+The Academic Co-Research can be deployed to Vertex AI Agent Engine using the following
+commands:
 
 ```bash
-gcloud auth application-default login
-python deploy.py
+uv sync --group deployment
+uv run deployment/deploy.py --create
 ```
 
-The script will print the resource name of the created Agent Engine instance on success.
+When the deployment finishes, it will print a line like this:
+
+```
+Created remote agent: projects/<PROJECT_NUMBER>/locations/<PROJECT_LOCATION>/reasoningEngines/<AGENT_ENGINE_ID>
+```
+
+If you forgot the AGENT_ENGINE_ID, you can list existing agents using:
+
+```bash
+uv run deployment/deploy.py --list
+```
