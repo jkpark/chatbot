@@ -87,7 +87,7 @@ that the agent's responses match a pre-defined response reasonablly well.
 
 ## Deployment
 
-The Academic Co-Research can be deployed to Vertex AI Agent Engine using the following
+The chatbot can be deployed to Vertex AI Agent Engine using the following
 commands:
 
 ```bash

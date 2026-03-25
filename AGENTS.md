@@ -18,5 +18,4 @@ This file defines the foundational mandates and constraints for all agents opera
 
 ## Workspace Specifics
 - The core chatbot logic resides in the `my_chatbot/` directory.
-- `agent_engine_app.py` is the main entry point for the API.
 - Always check `.env` for local environment configuration but never commit it.
