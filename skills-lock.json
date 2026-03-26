@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "adk-deploy-guide": {
+      "source": "google/adk-docs",
+      "sourceType": "github",
+      "computedHash": "7d7a00a921d8f0408b11aad4a0723efb187822e76bf92949888ecae50cb4c429"
+    },
+    "adk-dev-guide": {
+      "source": "google/adk-docs",
+      "sourceType": "github",
+      "computedHash": "e3ab9a05dd09d4cd9f0d9196d0cfc640f0e69a7f83d330572c62997776982892"
+    }
+  }
+}

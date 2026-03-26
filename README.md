@@ -2,6 +2,20 @@
 
 A chatbot built with [Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/get-started/python/).
 
+## Project Structure
+
+```
+chatbot/
+├── app/         # Core agent code
+│   ├── agent.py               # Main agent logic
+│   ├── fast_api_app.py        # FastAPI Backend server
+│   └── app_utils/             # App utilities and helpers
+├── tests/                     # Unit, integration, and load tests
+├── AGENTS.md                  # AI-assisted development guide
+├── Makefile                   # Development commands
+└── pyproject.toml             # Project dependencies
+```
+
 ## Prerequisites
 
 We recommend using [mise-en-place (mise)](https://mise.jdx.dev/) to manage your development environment. This project includes a `mise.toml` file to automatically install the required versions of Python, `uv`, and `gcloud`.
@@ -27,7 +41,7 @@ If you prefer to install the requirements manually, ensure you have the followin
 ### 1. Install dependencies
 
 ```bash
-uv sync
+make install
 ```
 
 ### 2. Configure Vertex AI credentials
@@ -45,6 +59,10 @@ Make sure you are authenticated with Google Cloud:
 ```bash
 gcloud auth application-default login
 gcloud auth application-default set-quota-project $GOOGLE_CLOUD_PROJECT
+```
+
+```bash
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com storage.googleapis.com --project "$GOOGLE_CLOUD_PROJECT"
 ```
 
 ### 3. Run the chatbot

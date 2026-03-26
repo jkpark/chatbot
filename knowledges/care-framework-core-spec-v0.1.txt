@@ -1,0 +1,255 @@
+Care Framework Core Spec v0.1
+
+1. Purpose
+The Care Framework is the shared foundation that enables CareHub to design, generate, deliver, and govern care experiences in a consistent way across programs.
+Its role is to provide:
+- a common structure,
+- a common operating model,
+- reusable logic and delivery patterns,
+- and a controlled way to onboard multiple programs without rebuilding the system each time.
+The Care Framework is not just a content repository, and it is not just a UX layer. It is the shared framework that connects user state, care logic, program content, delivery, measurement, and governance.
+
+2. Why It Exists
+The Care Framework exists to solve five core problems:
+
+2.1 Consistency
+Different programs should not create different logic models, object structures, or delivery behaviors.
+
+2.2 Reusability
+Common components should be designed once and reused across multiple programs.
+
+2.3 Controlled flexibility
+Programs need room to configure content and bounded parameters, but not to invent their own engine logic.
+
+2.4 Explainability
+Framework outputs must be understandable, reviewable, and governable.
+
+2.5 Scalability
+The system must support future programs, surfaces, and operating models without repeated redesign.
+
+3. Scope
+This Core Spec defines:
+- the framework boundary,
+- shared versus program-owned responsibilities,
+- the common object hierarchy,
+- the major functional layers,
+- governance and versioning principles,
+- and the operating model for program onboarding.
+
+This document does not replace detailed downstream specifications such as:
+- User Model and Intake,
+- Content Object Templates,
+- Personalization and Orchestration Logic,
+- UX Foundations,
+- Data Model and Runtime Contracts,
+- AI Boundary,
+- Analytics, QA, and Governance details.
+
+Those should exist as separate companion specs under this Core Spec.
+
+4. Core Design Principles
+The Care Framework should follow these principles:
+
+4.1 Shared-first
+Common logic, patterns, and structures should be centralized by default.
+
+4.2 Configurable, not custom-built
+Programs should operate through approved templates and bounded configuration, not through bespoke logic.
+
+4.3 Deterministic where trust matters
+Any logic affecting eligibility, safety, core plan generation, or auditability should be deterministic unless a specific AI exception is approved.
+
+4.4 Explainable by design
+The framework should support clear reasoning for why content, actions, or recommendations were generated.
+
+4.5 Modular but governed
+The framework should be modular enough to support growth, but governed tightly enough to prevent fragmentation.
+
+4.6 Delivery-aware
+The framework must account for real user delivery, including reminders, completion, adherence, and adaptation.
+
+4.7 Platform-ready
+The framework must fit CareHub's data, analytics, technical, and future surface requirements.
+
+5. Framework Boundary
+
+5.1 What the shared framework owns
+The shared Care Framework owns:
+- common definitions and terminology,
+- the object model and hierarchy,
+- shared care logic architecture,
+- shared content template structures,
+- shared delivery principles,
+- shared measurement and event standards,
+- governance and release rules,
+- the AI usage boundary,
+- and the standard model for program onboarding.
+
+5.2 What programs own
+Programs own:
+- program-specific content,
+- approved copy and assets,
+- program metadata and mappings,
+- and bounded configuration within the framework.
+
+5.3 What programs do not own
+Programs should not independently create:
+- new core object types,
+- new engine logic models,
+- new eligibility frameworks,
+- new delivery state models,
+- new analytics structures,
+- or uncontrolled AI behaviors.
+Any such change requires framework-level review and approval.
+
+6. Core Object Hierarchy
+The Care Framework should use a common hierarchy that separates strategic care design from delivery-ready units.
+
+Recommended hierarchy:
+Plan -> Program -> Intervention -> Action -> Atomic Action
+
+Plan
+The structured care construct delivered to the user over time.
+
+Program
+A bounded package of content and configuration that runs within the framework.
+
+Intervention
+A higher-level therapeutic or behavior-change component.
+
+Action
+A user-meaningful care activity or recommendation.
+
+Atomic Action
+The smallest delivery-ready unit that can be shown, suggested, scheduled, or completed in context.
+
+This hierarchy must be consistent across authoring, orchestration, delivery, and analytics.
+
+7. Functional Layers
+The Care Framework should be understood as a set of coordinated layers.
+
+7.1 User State and Intake
+Transforms user data, inputs, preferences, and context into a framework-readable state.
+
+7.2 Program and Content
+Holds the reusable program package, content assets, mappings, and bounded configuration.
+
+7.3 Care Logic
+Applies the shared logic for filtering, prioritization, sequencing, orchestration, and suppression.
+
+7.4 Delivery and Experience
+Defines how care is surfaced through CareHub touchpoints such as Today, Care Plan, reminders, and progress views.
+
+7.5 Adaptation
+Defines how the system responds over time to adherence, context change, outcomes, or new inputs.
+
+7.6 Data and Platform
+Supports runtime objects, contracts, integrations, and operational architecture.
+
+7.7 AI
+Defines where AI is allowed, what it can consume and produce, and how it must be validated.
+
+7.8 Governance and Measurement
+Defines KPIs, QA, release rules, versioning, and auditability.
+
+8. Program Onboarding Model
+Programs should be onboarded into the Care Framework through a standard package rather than through custom implementation.
+
+A standard onboarding package should include:
+- approved content assets,
+- required metadata and mappings,
+- bounded configuration values,
+- display content where applicable,
+- QA and readiness materials,
+- and any program-specific setup required by the framework.
+
+The onboarding model should make programs easier to scale while preserving one shared system behavior.
+
+9. Operating Model
+The Care Framework should operate as a shared platform model, not as a collection of loosely connected program builds.
+
+Framework-level decisions should remain centralized for:
+- object model changes,
+- logic model changes,
+- UX pattern changes,
+- AI boundary changes,
+- analytics and governance changes,
+- and program onboarding standards.
+
+Program-level decisions should remain bounded to:
+- approved content,
+- approved mappings,
+- approved configuration,
+- approved copy and assets.
+
+This distinction is essential to maintain consistency, speed, and quality as CareHub grows.
+
+10. Governance and Versioning
+The Care Framework must support formal governance from authoring through runtime.
+
+It should include:
+- clear ownership,
+- structured review and approval,
+- version control for core objects and rules,
+- change classification,
+- QA and launch-readiness checks,
+- and traceability for framework and program changes.
+
+Any change that affects shared logic, data contracts, delivery behavior, analytics, or AI must go through formal framework review.
+
+11. AI Boundary
+AI may be used only within clearly defined and approved boundaries.
+
+The framework must specify:
+- approved AI use cases,
+- deterministic-required areas,
+- input and output contract expectations,
+- validation rules,
+- fallback behavior,
+- and review requirements where needed.
+
+AI should enhance the framework where appropriate, but it should not replace core system structure or introduce uncontrolled logic variation.
+
+12. Measurement Expectations
+The Care Framework must emit standardized signals for:
+- delivery,
+- engagement,
+- completion,
+- reminder interaction,
+- adherence,
+- adaptation,
+- exceptions and failures,
+- and program attribution.
+
+Measurement must follow a shared event model so that performance can be compared, governed, and improved across programs.
+
+13. Definition of Success
+The Care Framework is successful when it achieves the following:
+- multiple programs can operate within one shared model,
+- teams use common structures and language,
+- user experience remains coherent across programs,
+- logic remains explainable and governable,
+- programs can onboard faster without custom engine work,
+- and the framework can scale without fragmentation.
+
+14. Definition of Done for This Spec
+This Core Spec should be considered ready when the following are approved:
+- shared versus program-owned boundary,
+- common object hierarchy,
+- major functional layers,
+- operating model for program onboarding,
+- governance and versioning principles,
+- AI boundary principle,
+- and the list of required companion specifications.
+
+15. Required Companion Specs
+This Core Spec should be supported by the following documents:
+1. User Model and Intake Spec
+2. Content Object Template Spec
+3. Personalization and Orchestration Spec
+4. Care Delivery UX Foundation Spec
+5. Reusable UX Pattern and IA Spec
+6. Core Data Model and Runtime Contract Spec
+7. Event Taxonomy Spec
+8. AI Boundary and Contract Spec
+9. KPI, QA, and Governance Spec
