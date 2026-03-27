@@ -62,9 +62,24 @@ gcloud auth application-default set-quota-project $GOOGLE_CLOUD_PROJECT
 ```
 
 ```bash
-gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com storage.googleapis.com --project "$GOOGLE_CLOUD_PROJECT"
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com storage.googleapis.com discoveryengine.googleapis.com aiplatform.googleapis.com --project "$GOOGLE_CLOUD_PROJECT"
 ```
 
+
+get service account
+
+```bash
+gcloud projects get-iam-policy $GOOGLE_CLOUD_PROJECT --flatten="bindings[].members" --format="table(bindings.role, bindings.members)"
+```
+
+set `$SERVICE_ACCOUNT`
+
+```bash
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/storage.objectViewer"
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT--member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/artifactregistry.reader"
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT"--role="roles/logging.logWriter"
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/aiplatform.user"
+```
 ### 3. Run the chatbot
 
 **Interactive CLI:**

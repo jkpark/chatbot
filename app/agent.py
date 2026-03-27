@@ -37,13 +37,14 @@ os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
 vertexai.init(project=project_id, location=LOCATION)
 
 
+collection_id = os.getenv("COLLECTION_ID", "default_collection")
 data_store_region = os.getenv("DATA_STORE_REGION", "global")
 data_store_id = os.getenv(
-    "DATA_STORE_ID", "ragbot-collection_documents"
+    "DATA_STORE_ID", "default-collection_documents"
 )
 data_store_path = (
     f"projects/{project_id}/locations/{data_store_region}"
-    f"/collections/default_collection/dataStores/{data_store_id}"
+    f"/collections/{collection_id}/dataStores/{data_store_id}"
 )
 
 vertex_search_tool = create_search_tool(data_store_path)
