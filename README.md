@@ -81,62 +81,58 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAc
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/aiplatform.user"
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/discoveryengine.user"
 ```
-### 3. Run the chatbot
 
-**Interactive CLI:**
 
-```bash
-adk run my_chatbot
-```
+## Quick Start
 
-**Web UI (browser-based dev interface):**
+Install required packages and launch the local development environment:
 
 ```bash
-adk web
+make install && make playground
 ```
 
-Then open `http://localhost:8000` in your browser.
+## Commands
 
-## Running Tests
+| Command              | Description                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| `make install`       | Install dependencies using uv                                                               |
+| `make playground`    | Launch local development environment                                                        |
+| `make lint`          | Run code quality checks                                                                     |
+| `make test`          | Run unit and integration tests                                                              |
+| `make deploy`        | Deploy agent to Cloud Run                                                                   |
+| `make local-backend` | Launch local development server with hot-reload                                             |
+| `make data-ingestion`| Run data ingestion pipeline                                                                 |
 
-For running tests and evaluation, install the extra dependencies:
+For full command options and usage, refer to the [Makefile](Makefile).
 
-```bash
-uv sync --dev
-```
+## 🛠️ Project Management
 
-Then the tests and evaluation can be run from the `academic-research` directory using
-the `pytest` module:
+| Command | What It Does |
+|---------|--------------|
+| `uvx agent-starter-pack enhance` | Add CI/CD pipelines and Terraform infrastructure |
+| `uvx agent-starter-pack setup-cicd` | One-command setup of entire CI/CD pipeline + infrastructure |
+| `uvx agent-starter-pack upgrade` | Auto-upgrade to latest version while preserving customizations |
+| `uvx agent-starter-pack extract` | Extract minimal, shareable version of your agent |
 
-```bash
-uv run pytest tests
-uv run pytest eval
-```
+---
 
-`tests` runs the agent on a sample request, and makes sure that every component
-is functional. `eval` is a demonstration of how to evaluate the agent, using the
-`AgentEvaluator` in ADK. It sends a couple requests to the agent and expects
-that the agent's responses match a pre-defined response reasonablly well.
+## Development
 
+Edit your agent logic in `app/agent.py` and test with `make playground` - it auto-reloads on save.
+See the [development guide](https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide) for the full workflow.
 
 ## Deployment
 
-The chatbot can be deployed to Vertex AI Agent Engine using the following
-commands:
-
 ```bash
-uv sync --group deployment
-uv run deployment/deploy.py --create
+gcloud config set project <your-project-id>
+make deploy
 ```
 
-When the deployment finishes, it will print a line like this:
+To add CI/CD and Terraform, run `uvx agent-starter-pack enhance`.
+To set up your production infrastructure, run `uvx agent-starter-pack setup-cicd`.
+See the [deployment guide](https://googlecloudplatform.github.io/agent-starter-pack/guide/deployment) for details.
 
-```
-Created remote agent: projects/<PROJECT_NUMBER>/locations/<PROJECT_LOCATION>/reasoningEngines/<AGENT_ENGINE_ID>
-```
+## Observability
 
-If you forgot the AGENT_ENGINE_ID, you can list existing agents using:
-
-```bash
-uv run deployment/deploy.py --list
-```
+Built-in telemetry exports to Cloud Trace, BigQuery, and Cloud Logging.
+See the [observability guide](https://googlecloudplatform.github.io/agent-starter-pack/guide/observability) for queries and dashboards.

@@ -24,9 +24,7 @@ from google.adk.apps import App
 from google.adk.models import Gemini
 from google.genai import types
 
-from app.retrievers import create_search_tool
-
-from . import prompt
+from app.agents import build_care_framework_agent, build_general_agent
 
 LLM_LOCATION = os.environ.get("GOOGLE_CLOUD_LOCATION", "global")
 LOCATION = os.environ.get("LOCATION", "asia-northeast3")
@@ -39,32 +37,33 @@ os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
 
 vertexai.init(project=project_id, location=LOCATION)
 
+def _build_model() -> Gemini:
+    return Gemini(
+        model="gemini-2.5-flash",
+        retry_options=types.HttpRetryOptions(attempts=3),
+    )
 
-collection_id = os.getenv("COLLECTION_ID", "default_collection")
-data_store_region = os.getenv("DATA_STORE_REGION", "global")
-data_store_id = os.getenv(
-    "DATA_STORE_ID", "default-collection_documents"
+
+care_framework_agent = build_care_framework_agent(
+    _build_model, project_id
 )
-data_store_path = (
-    f"projects/{project_id}/locations/{data_store_region}"
-    f"/collections/{collection_id}/dataStores/{data_store_id}"
-)
 
 
-# For debugging: print the path to verify it's correct
-print(f"DEBUG: Attempting to connect to Data Store: {data_store_path}")
-
-vertex_search_tool = create_search_tool(data_store_path)
+general_agent = build_general_agent(_build_model)
 
 
 root_agent = Agent(
     name="root_agent",
-    model=Gemini(
-        model="gemini-2.5-flash",
-        retry_options=types.HttpRetryOptions(attempts=3),
+    model=_build_model(),
+    instruction=(
+        "당신은 데이터플랫폼 부서 전용 루트 라우팅 에이전트입니다. "
+        "직접 답변하지 말고 요청 성격에 따라 아래 규칙으로 반드시 위임하세요. "
+        "사용자가 CARE Framework(정의, 구조, 운영 모델, 재사용 로직, 거버넌스, 온보딩, "
+        "스펙/정책/근거 확인)를 묻는 경우 care_framework_agent로 위임합니다. "
+        "사용자가 일상적인 대화, 일반 설명, 가벼운 문장 작성/정리 요청을 하는 경우 general_agent로 위임합니다. "
+        "요청이 모호하면 한 문장으로 짧게 의도를 확인한 뒤 가장 가까운 에이전트로 위임합니다."
     ),
-    instruction=prompt.SYSTEM_PROMPT,
-    tools=[vertex_search_tool],
+    sub_agents=[care_framework_agent, general_agent],
 )
 
 app = App(
