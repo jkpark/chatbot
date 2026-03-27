@@ -67,8 +67,8 @@ app: FastAPI = get_fast_api_app(
     session_service_uri=session_service_uri,
     otel_to_cloud=True,
 )
-app.title = "ragbot"
-app.description = "API for interacting with the Agent ragbot"
+app.title = "hdp-chatbot"
+app.description = "API for interacting with the Agent hdp-chatbot"
 
 
 @app.post("/feedback")

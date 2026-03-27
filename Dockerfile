@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir uv==0.11.0
 
 WORKDIR /code
 
-COPY ./pyproject.toml ./README.md ./uv.lock* ./
+COPY ./.env ./pyproject.toml ./README.md ./uv.lock* ./
 
 COPY ./app ./app
 

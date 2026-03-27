@@ -79,6 +79,7 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAc
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT--member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/artifactregistry.reader"
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT"--role="roles/logging.logWriter"
 gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/aiplatform.user"
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT --member="serviceAccount:$SERVICE_ACCOUNT" --role="roles/discoveryengine.user"
 ```
 ### 3. Run the chatbot
 

@@ -13,6 +13,9 @@
 # limitations under the License.
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 import google
 import vertexai
@@ -46,6 +49,10 @@ data_store_path = (
     f"projects/{project_id}/locations/{data_store_region}"
     f"/collections/{collection_id}/dataStores/{data_store_id}"
 )
+
+
+# For debugging: print the path to verify it's correct
+print(f"DEBUG: Attempting to connect to Data Store: {data_store_path}")
 
 vertex_search_tool = create_search_tool(data_store_path)
 

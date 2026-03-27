@@ -23,8 +23,7 @@ IMAGE_URL := $(GOOGLE_CLOUD_LOCATION)-docker.pkg.dev/$(GOOGLE_CLOUD_PROJECT)/$(R
 
 # Install dependencies using uv package manager
 install:
-	@command -v uv >/dev/null 2>&1 || { echo "uv is not installed. Installing uv..."; curl -LsSf https://astral.sh/uv/0.8.13/install.sh | sh; source $HOME/.local/bin/env; }
-	uv sync
+	@command -v uv >/dev/null 2>&1 && uv sync
 
 # ==============================================================================
 # Playground Targets
@@ -51,7 +50,7 @@ local-backend:
 	uv run uvicorn app.fast_api_app:app --host localhost --port $(or $(PORT),8000) --reload
 
 # ==============================================================================
-# Backend Deployment Targets
+# Backend Release
 # ==============================================================================
 
 release:
@@ -71,8 +70,11 @@ release:
 	fi && \
 	echo "Building and pushing image via Cloud Build..." && \
 	gcloud builds submit --tag "$(IMAGE_URL)" \
-		--substitutions=_AGENT_VERSION="$(shell awk -F'"' '/^version = / {print $$2}' pyproject.toml || echo '0.0.0')" \
 		.
+
+# ==============================================================================
+# Backend Deployment Targets
+# ==============================================================================
 
 # Deploy the agent remotely
 # Usage: make deploy [IAP=true] [PORT=8080] - Set IAP=true to enable Identity-Aware Proxy, PORT to specify container port
@@ -84,7 +86,7 @@ deploy:
 		--region "$(GOOGLE_CLOUD_LOCATION)" \
 		--no-allow-unauthenticated \
 		--labels "created-by=adk" \
-		--update-env-vars "AGENT_VERSION=$(shell awk -F'"' '/^version = / {print $$2}' pyproject.toml || echo '0.0.0')" \
+		--update-env-vars "AGENT_VERSION=$(awk -F'"' '/^version = / {print $$2}' pyproject.toml || echo '0.0.0')" \
 		$(if $(IAP),--iap) \
 		$(if $(PORT),--port=$(PORT))
 
@@ -107,15 +109,15 @@ setup-datastore:
 
 # Upload knowledges data and trigger initial sync
 data-ingestion:
-	PROJECT_ID=$$(gcloud config get-value project) && \
-	DATA_STORE_REGION=$$(grep 'data_store_region' deployment/terraform/dev/vars/env.tfvars | sed 's/.*= *"//;s/".*//') && \
+# 	PROJECT_ID=$$(gcloud config get-value project) && \
+# 	DATA_STORE_REGION=$$(grep 'data_store_region' deployment/terraform/dev/vars/env.tfvars | sed 's/.*= *"//;s/".*//') &&
 	gcloud storage cp knowledges/* gs://$$PROJECT_ID-$$SERVICE_NAME/knowledges/ && \
 	uv run deployment/terraform/scripts/start_connector_run.py $$PROJECT_ID $$DATA_STORE_REGION $$SERVICE_NAME-collection --wait
 
 # Trigger an on-demand sync for the GCS Data Connector
 sync-data:
-	PROJECT_ID=$$(gcloud config get-value project) && \
-	DATA_STORE_REGION=$$(grep 'data_store_region' deployment/terraform/dev/vars/env.tfvars | sed 's/.*= *"//;s/".*//') && \
+# 	PROJECT_ID=$$(gcloud config get-value project) && \
+# 	DATA_STORE_REGION=$$(grep 'data_store_region' deployment/terraform/dev/vars/env.tfvar | sed 's/.*= *"//;s/".*//') &&
 	uv run deployment/terraform/scripts/start_connector_run.py $$PROJECT_ID $$DATA_STORE_REGION $$SERVICE_NAME-collection --wait
 
 # ==============================================================================
